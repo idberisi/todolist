@@ -1,0 +1,53 @@
+
+<ion-content>
+
+  <div class="center">
+    <ion-icon class="bigIcon" name="file-tray-full-outline"></ion-icon>
+  </div>
+       
+
+
+
+  <ion-card>
+    <ion-card-header>
+      <h2 class="text-center">Welcome to TodoList</h2>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-grid>
+    
+        <ion-row>
+          <ion-item>
+            <ion-icon slot="start" name="person-circle-outline"></ion-icon>
+            <ion-input [(ngModel)]="this.username" type="text" placeholder="Username"></ion-input>
+          </ion-item>
+        </ion-row>
+    
+        <ion-row >
+          <ion-item>
+            <ion-icon slot="start" name="key"></ion-icon>
+            <ion-input [(ngModel)]="this.pass" type="password" placeholder="Password"></ion-input>
+          </ion-item>
+        </ion-row>
+    
+        <ion-row>
+    
+          <ion-col>
+            <ion-button (click)="login()" color="success" >Login</ion-button>
+          </ion-col>
+          
+        </ion-row>
+    
+        <ion-row>
+          <ion-col>{{ this.error }}</ion-col>
+        </ion-row>
+    
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>
+<ion-footer>
+  <ion-item (click)="gotoSignup()">
+    No Account? Sign up Here
+  </ion-item>
+</ion-footer>

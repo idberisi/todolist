@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
 import { NewserviceService,todoItem } from 'src/app/newservice.service';
-
-
 
 @Component({
   selector: 'app-item-detail',
@@ -15,7 +13,13 @@ export class ItemDetailPage implements OnInit {
   public item:todoItem;
   public index:any;
 
-  constructor(private router:Router,private alertController:AlertController,private activatedRoute:ActivatedRoute, private newService:NewserviceService) { }
+  constructor(
+    private router:Router,
+    private alertController:AlertController,
+    private activatedRoute:ActivatedRoute,
+    private newService:NewserviceService,
+    private nav:NavController,
+    ) { }
 
   ngOnInit() {
     this.index=this.activatedRoute.snapshot.paramMap.get('index');
@@ -24,7 +28,7 @@ export class ItemDetailPage implements OnInit {
 
   public async updateItem(){
     this.newService.updateItem(this.item,this.index);
-    this.router.navigate(['/'])
+    this.nav.back();
   }
 
   async removeAlert(index) {
@@ -54,7 +58,7 @@ export class ItemDetailPage implements OnInit {
 
   public removeItem(){
     this.newService.removeItem(this.index);
-    this.router.navigate(['/'])
+    this.nav.back();
   }
 }
 

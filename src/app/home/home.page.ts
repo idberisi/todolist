@@ -1,17 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController, ToastController } from '@ionic/angular';
 import { NewserviceService, todoItem } from '../newservice.service';
-//import { TodolistServiceService } from '../todolist-service.service';
 import { Clipboard } from '@capacitor/clipboard';
 import { ModalController } from '@ionic/angular';
 import { NewTaskModulePage } from '../modules/new-task-module/new-task-module.page';
-
-
-
-
-
-
-
 
 @Component({
   selector: 'app-home',
@@ -19,62 +11,66 @@ import { NewTaskModulePage } from '../modules/new-task-module/new-task-module.pa
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit {
-  
+
+  constructor(
+    public modalController: ModalController,
+    public alertController: AlertController,
+    public newService: NewserviceService,
+    public toastController: ToastController,
+    private newservice: NewserviceService,
+
+  ) {
+    this.newService.todoObservable.subscribe((items: todoItem[]) => {
+      this.items = items;
+    })
+  }
+
   ngOnInit() {
     this.newService.getItems();
   }
 
-  public items:todoItem[] = [];
-
-  public text:string='';
-  public description:string='';
-  public edit_index:number=-1;
-
-  constructor(public modalController: ModalController,public alertController: AlertController,public newService:NewserviceService, public toastController: ToastController) {
-    this.newService.todoObservable.subscribe((items:todoItem[])=>{
-      this.items=items;
-    })
-  }
+  public items: todoItem[] = [];
+  public text: string = '';
+  public description: string = '';
+  public edit_index: number = -1;
 
   async presentModal() {
     const modal = await this.modalController.create({
       component: NewTaskModulePage
     });
 
-    modal.onDidDismiss().then((data:any)=>{
-      //console.log(data);
-      let newItem:todoItem=data.data;
-      //console.log('New Item',newItem)
+    modal.onDidDismiss().then((data: any) => {
+      let newItem: todoItem = data.data;
       this.newService.addItem(newItem);
     });
     return await modal.present();
   }
 
-  public removeItem(index){
+  public removeItem(index) {
     this.newService.removeItem(index);
   }
 
-  public edit(index){
-    this.edit_index=index;
-    this.text=this.items[index].t;
-    this.description=this.items[index].d;
+  public edit(index) {
+    this.edit_index = index;
+    this.text = this.items[index].t;
+    this.description = this.items[index].d;
   }
 
-  public markAsComplete(index,state){
-    this.newService.markAsComplete(index,state);
+  public markAsComplete(index, state) {
+    this.newService.markAsComplete(index, state);
   }
 
-  public async writeToClipboard(text:string){
+  public async writeToClipboard(text: string) {
     console.log(text);
     await Clipboard.write({
       string: text
     });
-    this.toastController.create({message:"COPY FROM CLIPBOARD",duration:3000,position:"bottom"  }).then( t => t.present() )
+    this.toastController.create({ message: "COPY FROM CLIPBOARD", duration: 3000, position: "bottom" }).then(t => t.present())
   }
 
-  public async checkClipboard(){
+  public async checkClipboard() {
     const { type, value } = await Clipboard.read();
-    this.description=value;
+    this.description = value;
     alert(`Got ${type} from clipboard: ${value}`);
   }
 
