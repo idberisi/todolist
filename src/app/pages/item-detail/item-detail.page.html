@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{item.t}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item>
+    <ion-label position="stacked">Title</ion-label>
+    <ion-input [(ngModel)]='item.t'></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="stacked">Description</ion-label>
+    <ion-textarea [(ngModel)]='item.d'></ion-textarea>
+  </ion-item>
+  <ion-item>
+    <ion-label>Completed <ion-checkbox [(ngModel)]='item.c'></ion-checkbox></ion-label>
+  </ion-item>
+  <ion-item>
+    <ion-button (click)="updateItem()">Save</ion-button>
+    <ion-button size='small' color='danger' (click)="removeAlert(i)"><ion-icon name="trash"></ion-icon></ion-button>
+  </ion-item>
+</ion-content>
