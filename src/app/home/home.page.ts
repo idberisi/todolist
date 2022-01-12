@@ -42,7 +42,9 @@ export class HomePage implements OnInit {
     });
 
     modal.onDidDismiss().then((data:any)=>{
-      let newItem:todoItem={t:data.c,c:false,d:data.d}
+      //console.log(data);
+      let newItem:todoItem=data.data;
+      //console.log('New Item',newItem)
       this.newService.addItem(newItem);
     });
     return await modal.present();

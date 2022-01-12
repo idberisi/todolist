@@ -19,13 +19,12 @@ export class NewTaskModulePage implements OnInit {
   }
 
   public dismiss(item:any){
-    this.modalController.dismiss(item);
+    //this.modalController.dismiss(item);
   }
 
   public changeTitle(e){
     console.log('Title',e.detail.value);
     this.title=e.detail.value;
-    
   }
 
   public changeDescription(e){
@@ -33,7 +32,7 @@ export class NewTaskModulePage implements OnInit {
     this.description=e.detail.value;
   }
 
-  public add(){
+  public addNew(){
     if(!this.description) return;
     if(!this.title) return;
     let item:any={
@@ -41,7 +40,9 @@ export class NewTaskModulePage implements OnInit {
       d:this.description,
       c:false
     };
-    this.dismiss(item);
+    console.log(item);
+    // this.dismiss(item);
+    this.modalController.dismiss(item);
   }
   
 
