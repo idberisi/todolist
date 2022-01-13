@@ -16,8 +16,8 @@
   <ion-datetime (ionChange)="changeDue($event)"></ion-datetime>
 
   <ion-item>
-    <ion-label position="stacked">Priority</ion-label>
     <ion-select (ionChange)='changePriority($event)'>
+      <ion-select-option>Task Priority</ion-select-option>
       <ion-select-option value="ellipse-outline">Low</ion-select-option>
       <ion-select-option value="alert-circle-outline">Medium</ion-select-option>
       <ion-select-option value="flame-outline">High</ion-select-option>
