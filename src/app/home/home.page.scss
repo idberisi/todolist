@@ -46,3 +46,16 @@
 .arrowholder {
   position: relative;
 }
+
+
+.icons {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  
+}
+
+.icons ion-icon {
+  margin: 5pt;
+}

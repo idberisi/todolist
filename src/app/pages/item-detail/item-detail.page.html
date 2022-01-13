@@ -2,7 +2,7 @@
   <ion-toolbar>
     <ion-title>{{item.t}}</ion-title>
     <ion-buttons slot="end">
-      <ion-button color="danger" slot="icon-only" (click)="removeAlert(i)">
+      <ion-button color="danger" slot="icon-only" (click)="removeAlert()">
         <ion-icon name="trash"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -22,6 +22,18 @@
     <ion-textarea (ionChange)="updateItemDetail()" [(ngModel)]='item.d'></ion-textarea>
   </ion-item>
   <ion-item>
+    <ion-label position="stacked">Due</ion-label>
+    <ion-datetime (ionChange)="updateItemDetail()" [(ngModel)]='item.due'></ion-datetime>
+  </ion-item>
+  <ion-item>
+    <ion-label position="stacked">Priority</ion-label>
+    <ion-select [(ngModel)]='item.p'>
+      <ion-select-option value="ellipse-outline">Low</ion-select-option>
+      <ion-select-option value="alert-circle-outline">Medium</ion-select-option>
+      <ion-select-option value="flame-outline">High</ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-item>
     <ion-label>Completed <ion-checkbox #completed></ion-checkbox></ion-label>
   </ion-item>
   <ion-grid>
@@ -35,12 +47,9 @@
 </ion-content>
 <ion-footer>
   <ion-tab-bar>
-    <app-tabs [download]="false"></app-tabs>
     <ion-tab-button color="success" (click)="updateItem()">
       <ion-icon name="save-outline"></ion-icon>
       Save
     </ion-tab-button>
   </ion-tab-bar> 
-  
-  
 </ion-footer>

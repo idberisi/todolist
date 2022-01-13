@@ -11,6 +11,8 @@ export interface todoItem {
   i: string;
   cr: number;
   co: any;
+  p:string;
+  due:any;
 }
 
 @Injectable({

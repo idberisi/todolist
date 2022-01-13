@@ -12,10 +12,26 @@
     <ion-label position="stacked">Title</ion-label>
     <ion-input (ionChange)='changeTitle($event)'></ion-input>
   </ion-item>
+
   <ion-item>
     <ion-label position="stacked">Description</ion-label>
     <ion-textarea (ionChange)='changeDescription($event)'></ion-textarea>
   </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">Due</ion-label>
+    <ion-datetime (ionChange)="changeDue($event)"></ion-datetime>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">Priority</ion-label>
+    <ion-select (ionChange)='changePriority($event)'>
+      <ion-select-option value="ellipse-outline">Low</ion-select-option>
+      <ion-select-option value="alert-circle-outline">Medium</ion-select-option>
+      <ion-select-option value="flame-outline">High</ion-select-option>
+    </ion-select>
+  </ion-item>
+
   <ion-item>
     <ion-label position="stacked">Icons</ion-label>
     <ion-grid>

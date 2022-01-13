@@ -24,14 +24,14 @@
 <ion-content [fullscreen]="true">
 
   <div class="arrowholder ion-no-margin ion-no-padding" *ngIf="this.items.length == 0">
-    <ion-img class="positionArrow ion-no-margin ion-no-padding" src="../../assets/arrow.png" ></ion-img>
+    <ion-img class="positionArrow ion-no-margin ion-no-padding" src="../../assets/arrow.png"></ion-img>
     <div class="arrowHelp">
       <ion-text color="dakr">Add tasks to you list here</ion-text>
     </div>
   </div>
 
   <ion-list>
-    <ion-item-sliding #slidingItems *ngFor="let item of items;let i = index" [hidden]="shouldHide(item)">
+    <ion-item-sliding (click)="setItem(item)" #slidingItems *ngFor="let item of items;let i = index" [hidden]="shouldHide(item)">
 
       <ion-item-options side="start">
         <ion-item-option [color]="item.c ? 'success':'light' ">
@@ -39,27 +39,40 @@
         </ion-item-option>
       </ion-item-options>
 
-      <ion-item [color]='item.c ? "success" : "light"'>
-        <ion-icon slot="start" *ngIf="item.i" [name]="item.i"></ion-icon>
+      <ion-item [color]="item.c ? 'success':'' ">
+        <div class="icons ion-margin-horizontal">
+          <ion-icon *ngIf="item.i" [name]="item.i"></ion-icon>
+          <ion-icon *ngIf="item.p" [name]="item.p" [color]="setColour(item)"></ion-icon>
+        </div>
+
         <ion-label>
           <h2>{{item.t}}</h2>
-          <h4>Created: {{item.cr | date:"d MMM y @ HH:mm:SS"}}</h4>
-          <h4 *ngIf="item.c">Complete: {{item.co | date:"d MMM y @ HH:mm:SS"}}</h4>
+          <ion-note slot="end">
+            <h4>Set: {{item.cr | date:"d MMM y @ HH:mm:SS"}}</h4>
+            <h4 *ngIf="item.c">Due: {{item.due | date:"d MMM y @ HH:mm:SS"}}</h4>
+            <h4 *ngIf="item.c">Complete: {{item.co | date:"d MMM y @ HH:mm:SS"}}</h4>
+          </ion-note>
           <p>{{item.d}}</p>
         </ion-label>
       </ion-item>
 
       <ion-item-options side="end">
-        <ion-item-option color='primary' (click)="edit(i)"><ion-icon name="create-outline"></ion-icon></ion-item-option>
-        <ion-item-option color='danger' (click)="removeAlert(i)"><ion-icon name="trash"></ion-icon></ion-item-option> 
+        <ion-item-option color='light' (click)="social(item)">
+          <ion-icon name="share-social-outline"></ion-icon>
+        </ion-item-option>
+        <ion-item-option color='primary' (click)="edit(i)">
+          <ion-icon name="create-outline"></ion-icon>
+        </ion-item-option>
+        <ion-item-option color='danger' (click)="removeAlert(i)">
+          <ion-icon name="trash"></ion-icon>
+        </ion-item-option>
       </ion-item-options>
 
     </ion-item-sliding>
   </ion-list>
 </ion-content>
 <ion-footer *ngIf="this.items.length >0">
-  <ion-tab-bar>
-    <app-tabs [share]="false" ></app-tabs>
-  </ion-tab-bar>
   
+    <app-tabs [share]="this.activeItem"></app-tabs>
+
 </ion-footer>

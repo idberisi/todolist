@@ -2,10 +2,9 @@ import { Router } from '@angular/router';
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { AlertController, IonItemSliding, ToastController } from '@ionic/angular';
 import { NewserviceService, todoItem } from '../newservice.service';
-import { Clipboard } from '@capacitor/clipboard';
 import { ModalController } from '@ionic/angular';
 import { NewTaskModulePage } from '../modules/new-task-module/new-task-module.page';
-
+import { Share } from '@capacitor/share';
 
 @Component({
   selector: 'app-home',
@@ -33,6 +32,7 @@ export class HomePage implements OnInit {
     this.newService.getItems();
   }
 
+  public activeItem:any = false;
   public items: todoItem[] = [];
   public text: string = '';
   public description: string = '';
@@ -53,6 +53,16 @@ export class HomePage implements OnInit {
       }
     });
     return await modal.present();
+  }
+
+  public async social(item) {
+    this.slidingItems.closeOpened().then(()=>{
+      Share.share({
+        title: item.t + (item.c ? ' [COMPLETE]' : ' [TODO]'),
+        text: 'Title:' + item.t + "\r\nStatus: " + (item.c ? 'Complete' : 'Incomplete') + "\r\nDescripton: " + item.d + "\r\nCreated: " + item.cr + (item.c ?  "\r\nCompleted:: " + item.co : ''),
+        dialogTitle: 'Share this task',
+      })
+    })
   }
 
   private async toast(message) {
@@ -76,6 +86,24 @@ export class HomePage implements OnInit {
       this.router.navigateByUrl('detail/' + index)
     })
 
+  }
+
+  setColour(item) {
+    switch (item.p) {
+      case 'ellipse-outline':
+        return 'success';
+      break;
+      case 'alert-circle-outline':
+        return 'warning';
+      break;
+      case 'flame-outline':
+        return 'danger';
+      break;
+    }
+  }
+
+  setItem(item:todoItem) {
+    this.activeItem = item;
   }
 
   public toggleState(index) {

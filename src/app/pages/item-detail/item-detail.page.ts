@@ -1,7 +1,7 @@
 import { IconographyService } from './../../services/iconography.service';
 import { TodolistServiceService } from './../../todolist-service.service';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { AlertController, IonToggle, NavController } from '@ionic/angular';
 import { NewserviceService,todoItem } from 'src/app/newservice.service';
 
@@ -13,6 +13,7 @@ import { NewserviceService,todoItem } from 'src/app/newservice.service';
 export class ItemDetailPage implements OnInit, AfterViewInit {
 
   @ViewChild('completed') completed:IonToggle;
+  @ViewChild('tabs') tabs:ElementRef;
 
   public item:todoItem;
   public index:any;
@@ -47,8 +48,9 @@ export class ItemDetailPage implements OnInit, AfterViewInit {
       } else {
         this.item.co = false;
       }
-
     })
+
+    
   }
 
   public async updateItem(){
@@ -58,7 +60,7 @@ export class ItemDetailPage implements OnInit, AfterViewInit {
     this.nav.back();
   }
 
-  async removeAlert(index) {
+  async removeAlert() {
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',
       header: 'Are you sure ?',

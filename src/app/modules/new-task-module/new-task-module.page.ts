@@ -13,8 +13,10 @@ export class NewTaskModulePage implements OnInit {
   public description:string="";
   public title:string="";
   public icon:string="";
+  public priority:string="";
   public icons:any = [];
   public selected:string = '';
+  public due:any = false;
 
   constructor(
     private modalController:ModalController,
@@ -51,6 +53,16 @@ export class NewTaskModulePage implements OnInit {
     this.icon = e.detail.value;
   }
 
+  public changePriority(e) {
+    console.log('Priority',e.detail.value);
+    this.priority = e.detail.value;
+  } 
+
+  public changeDue(e) {
+    console.log('Due',e.detail.value);
+    this.due = e.detail.value;
+  }
+
   public addNew(){
     if(!this.description) return;
     if(!this.title) return;
@@ -58,9 +70,11 @@ export class NewTaskModulePage implements OnInit {
       t:this.title,
       d:this.description,
       i:this.selected,
+      p:this.priority,
       c:false,
       cr: new Date().getTime(),
       co: false,
+      due: this.due,
     };
     console.log(item);
     // this.dismiss(item);
