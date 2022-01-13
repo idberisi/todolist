@@ -1,39 +1,65 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
+
+    <ion-buttons slot="start">
+      <ion-button (click)="hideComplete()">
+        <ion-icon *ngIf="this.hidden" name="eye-off-outline"></ion-icon>
+        <ion-icon *ngIf="!this.hidden" name="eye-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title class="text-center">
       To-do List - {{items.length}} Items
     </ion-title>
 
-    <ion-buttons slot="end"><ion-button (click)="presentModal()"><ion-icon name="add-circle-outline"></ion-icon></ion-button></ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="presentModal()">
+        <ion-icon name="add-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
 
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">To-do List {{items.length}} Taks</ion-title>
-    </ion-toolbar>
-  </ion-header>
-  <!-- Default Item -->
+
+  <div class="arrowholder ion-no-margin ion-no-padding" *ngIf="this.items.length == 0">
+    <ion-img class="positionArrow ion-no-margin ion-no-padding" src="../../assets/arrow.png" ></ion-img>
+    <div class="arrowHelp">
+      <ion-text color="dakr">Add tasks to you list here</ion-text>
+    </div>
+  </div>
+
   <ion-list>
-    <ion-item-sliding *ngFor="let item of items;let i = index">
+    <ion-item-sliding #slidingItems *ngFor="let item of items;let i = index" [hidden]="shouldHide(item)">
 
       <ion-item-options side="start">
-        <ion-item-option color="warning"><ion-checkbox (click)='markAsComplete(i,item.c ? false : true)' [checked]='item.c'></ion-checkbox></ion-item-option>
+        <ion-item-option [color]="item.c ? 'success':'light' ">
+          <ion-checkbox (ionChange)="toggleState(i)" [checked]='item.c'></ion-checkbox>
+        </ion-item-option>
       </ion-item-options>
 
-      <ion-item [routerLink]="['/detail/'+i]" [color]='item.c ? "warning" : ""'>
+      <ion-item [color]='item.c ? "success" : "light"'>
+        <ion-icon slot="start" *ngIf="item.i" [name]="item.i"></ion-icon>
         <ion-label>
-          <h3>{{item.t}}</h3>
+          <h2>{{item.t}}</h2>
+          <h4>Created: {{item.cr | date:"d MMM y @ HH:mm:SS"}}</h4>
+          <h4 *ngIf="item.c">Complete: {{item.co | date:"d MMM y @ HH:mm:SS"}}</h4>
           <p>{{item.d}}</p>
         </ion-label>
       </ion-item>
 
       <ion-item-options side="end">
+        <ion-item-option color='primary' (click)="edit(i)"><ion-icon name="create-outline"></ion-icon></ion-item-option>
         <ion-item-option color='danger' (click)="removeAlert(i)"><ion-icon name="trash"></ion-icon></ion-item-option> 
       </ion-item-options>
 
     </ion-item-sliding>
   </ion-list>
 </ion-content>
+<ion-footer *ngIf="this.items.length >0">
+  <ion-tab-bar>
+    <app-tabs [share]="false" ></app-tabs>
+  </ion-tab-bar>
+  
+</ion-footer>

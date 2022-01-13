@@ -1,26 +1,46 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
-    </ion-buttons>
     <ion-title>{{item.t}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="danger" slot="icon-only" (click)="removeAlert(i)">
+        <ion-icon name="trash"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+
+  
+
   <ion-item>
     <ion-label position="stacked">Title</ion-label>
-    <ion-input [(ngModel)]='item.t'></ion-input>
+    <ion-input (ionChange)="updateItemDetail()" [(ngModel)]="item.t" ></ion-input>
   </ion-item>
   <ion-item>
     <ion-label position="stacked">Description</ion-label>
-    <ion-textarea [(ngModel)]='item.d'></ion-textarea>
+    <ion-textarea (ionChange)="updateItemDetail()" [(ngModel)]='item.d'></ion-textarea>
   </ion-item>
   <ion-item>
-    <ion-label>Completed <ion-checkbox [(ngModel)]='item.c'></ion-checkbox></ion-label>
+    <ion-label>Completed <ion-checkbox #completed></ion-checkbox></ion-label>
   </ion-item>
-  <ion-item>
-    <ion-button (click)="updateItem()">Save</ion-button>
-    <ion-button size='small' color='danger' (click)="removeAlert(i)"><ion-icon name="trash"></ion-icon></ion-button>
-  </ion-item>
+  <ion-grid>
+    <ion-row class="ion-justify-items-center">
+      <ion-col size="4" *ngFor="let i of this?.icons" class="center">
+        <ion-icon (click)="selectedIcon(i)" [color]="item.i == i ? 'success':'dark'" class="ion-margin" size="large" [name]="i"></ion-icon>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  
 </ion-content>
+<ion-footer>
+  <ion-tab-bar>
+    <app-tabs [download]="false"></app-tabs>
+    <ion-tab-button color="success" (click)="updateItem()">
+      <ion-icon name="save-outline"></ion-icon>
+      Save
+    </ion-tab-button>
+  </ion-tab-bar> 
+  
+  
+</ion-footer>

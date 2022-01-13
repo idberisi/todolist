@@ -8,6 +8,9 @@ export interface todoItem {
   t: string;
   c: boolean;
   d: string;
+  i: string;
+  cr: number;
+  co: any;
 }
 
 @Injectable({

@@ -1,14 +1,17 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
-
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
-
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { IonicStorageModule } from '@ionic/storage-angular';
-
 import { HttpClientModule } from '@angular/common/http';
+
+class myErrorHandler implements ErrorHandler {
+  handleError(err: Error): void {
+    console.error(err.message,err);
+  }
+} 
 
 @NgModule({
   declarations: [AppComponent],
@@ -20,7 +23,10 @@ import { HttpClientModule } from '@angular/common/http';
     AppRoutingModule, 
     IonicStorageModule.forRoot()
   ],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy,  }],
+  providers: [
+    { provide: ErrorHandler, useClass: myErrorHandler },
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy,  }
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

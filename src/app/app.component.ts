@@ -1,3 +1,4 @@
+import { IconographyService } from './services/iconography.service';
 import { Component } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
 
@@ -7,7 +8,11 @@ import { Storage } from '@ionic/storage-angular';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
-  constructor(private stroageAngular:Storage) {
+  constructor(
+    private stroageAngular:Storage,
+    private icons:IconographyService,
+    ) {
     stroageAngular.create();
+    icons.setNames();
   }
 }

@@ -16,8 +16,32 @@
     <ion-label position="stacked">Description</ion-label>
     <ion-textarea (ionChange)='changeDescription($event)'></ion-textarea>
   </ion-item>
+  <ion-item>
+    <ion-label position="stacked">Icons</ion-label>
+    <ion-grid>
+      <ion-row class="ion-justify-items-center">
+        <ion-col size="4" *ngFor="let i of this?.icons" class="center">
+          <ion-icon (click)="selectedIcon(i)" [color]="this.selected == i ? 'success':'dark'" class="ion-margin"
+            size="large" [name]="i"></ion-icon>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-item>
+
+
+
 </ion-content>
 
 <ion-footer>
-  <ion-button (click)='addNew()'>Add</ion-button>
+  <ion-tab-bar>
+    <ion-tab-button color="danger" (click)='dismiss()'>
+      <ion-icon name="close-circle-outline"></ion-icon>
+      Close
+    </ion-tab-button>
+    <ion-tab-button color="success" (click)='addNew()'>
+      <ion-icon name="save-outline"></ion-icon>
+      Store New Task
+    </ion-tab-button>
+  </ion-tab-bar>
+
 </ion-footer>

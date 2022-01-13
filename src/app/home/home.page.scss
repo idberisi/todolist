@@ -25,3 +25,24 @@
 #container a {
   text-decoration: none;
 }
+
+
+.positionArrow {
+  max-height: 100pt;
+  max-width: 100pt;
+  position: absolute;
+  right:10pt;
+}
+
+.arrowHelp {
+  margin-top: 100pt;
+  position: absolute;
+  left:0;
+  right:0;
+  text-align: center;
+  font-weight: bold;
+}
+
+.arrowholder {
+  position: relative;
+}

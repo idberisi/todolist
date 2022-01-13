@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
 const TODOLISTKEY:string='key';
-
+const CURRENT:string='current';
 @Injectable({
   providedIn: 'root'
 })
@@ -17,4 +17,13 @@ export class TodolistServiceService {
   public async get(){
     return await this.todolistStorage.get(TODOLISTKEY)
   }
+
+  public async setCurrent(data:any){
+    await this.todolistStorage.set(CURRENT,data);
+  }
+
+  public async getCurrent(){
+    return await this.todolistStorage.get(CURRENT)
+  }
+
 }

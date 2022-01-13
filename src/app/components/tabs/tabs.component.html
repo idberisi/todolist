@@ -1,3 +1,11 @@
-<p>
-  tabs works!
-</p>
+
+  <ion-tab-button [hidden]="!this.share">
+    <ion-icon (click)="this.social()" name="share-social-outline"></ion-icon>
+    Share
+  </ion-tab-button>
+
+  <ion-tab-button [hidden]="!this.download" (click)="this.export()">
+    <ion-icon name="download-outline"></ion-icon>
+    Download
+  </ion-tab-button>
+
