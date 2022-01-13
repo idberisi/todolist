@@ -5,31 +5,57 @@
 </ion-header>
 
 <ion-content>
+
   <ion-item>
-    <ion-input placeholder="Task Name" ='changeTitle($event)'></ion-input>
+    <ion-label position="floating">Task Name</ion-label>
+    <ion-input placeholder="Task Name" (ionChange)='changeTitle($event)'></ion-input>
   </ion-item>
 
   <ion-item>
+    <ion-label position="floating">Task Description</ion-label>
     <ion-textarea placeholder="Description" (ionChange)='changeDescription($event)'></ion-textarea>
   </ion-item>
 
-  <ion-datetime (ionChange)="changeDue($event)"></ion-datetime>
+  <ion-accordion-group>
+    <ion-accordion value="options">
+      <ion-item slot="header">
+        <ion-label>Due Date</ion-label>
+      </ion-item>
+      <ion-list slot="content">
+        <ion-datetime (ionChange)="changeDue($event)"></ion-datetime>
+      </ion-list>
+    </ion-accordion>
 
-  <ion-item>
-    <ion-select (ionChange)='changePriority($event)'>
-      <ion-select-option>Task Priority</ion-select-option>
-      <ion-select-option value="ellipse-outline">Low</ion-select-option>
-      <ion-select-option value="alert-circle-outline">Medium</ion-select-option>
-      <ion-select-option value="flame-outline">High</ion-select-option>
-    </ion-select>
-  </ion-item>
+    <ion-accordion value="options">
+      <ion-item slot="header">
+        <ion-label>Priority</ion-label>
+      </ion-item>
+      <ion-list slot="content">
+        <ion-select (ionChange)='changePriority($event)'>
+          <ion-select-option>Task Priority</ion-select-option>
+          <ion-select-option value="ellipse-outline">Low</ion-select-option>
+          <ion-select-option value="alert-circle-outline">Medium</ion-select-option>
+          <ion-select-option value="flame-outline">High</ion-select-option>
+        </ion-select>
+      </ion-list>
+    </ion-accordion>
 
-  <ion-label position="stacked">Icons</ion-label>
-  <ion-segment [scrollable]="true" value="icon">
-    <ion-segment-button (click)="selectedIcon(i)" [value]="i" *ngFor="let i of this?.icons" class="center">
-      <ion-icon size="large" [color]="this.selected == i ? 'success':'dark'" [name]="i"></ion-icon>
-    </ion-segment-button>
-  </ion-segment>
+    <ion-accordion value="options">
+      <ion-item slot="header">
+        <ion-label>Icon</ion-label>
+      </ion-item>
+
+      <ion-list slot="content">
+
+        <ion-segment [scrollable]="true" value="icon">
+          <ion-segment-button (click)="selectedIcon(i)" [value]="i" *ngFor="let i of this?.icons" class="center">
+            <ion-icon class="ion-padding" [color]="this.selected == i ? 'success':'dark'" [name]="i"></ion-icon>
+          </ion-segment-button>
+        </ion-segment>
+
+      </ion-list>
+    </ion-accordion>
+  </ion-accordion-group>
 
 </ion-content>
 
