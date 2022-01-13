@@ -60,7 +60,9 @@ export class NewTaskModulePage implements OnInit {
 
   public changeDue(e) {
     console.log('Due',e.detail.value);
-    this.due = e.detail.value;
+    let D = Date.parse(e.detail.value);
+    this.due = D / 1000;
+    console.log(this.due);
   }
 
   public addNew(){

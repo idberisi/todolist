@@ -1,27 +1,19 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
-    </ion-buttons>
-    <ion-title>New Task</ion-title>
+    <ion-title>Create New Task</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-item>
-    <ion-label position="stacked">Title</ion-label>
-    <ion-input (ionChange)='changeTitle($event)'></ion-input>
+    <ion-input placeholder="Task Name" ='changeTitle($event)'></ion-input>
   </ion-item>
 
   <ion-item>
-    <ion-label position="stacked">Description</ion-label>
-    <ion-textarea (ionChange)='changeDescription($event)'></ion-textarea>
+    <ion-textarea placeholder="Description" (ionChange)='changeDescription($event)'></ion-textarea>
   </ion-item>
 
-  <ion-item>
-    <ion-label position="stacked">Due</ion-label>
-    <ion-datetime (ionChange)="changeDue($event)"></ion-datetime>
-  </ion-item>
+  <ion-datetime (ionChange)="changeDue($event)"></ion-datetime>
 
   <ion-item>
     <ion-label position="stacked">Priority</ion-label>
@@ -32,19 +24,12 @@
     </ion-select>
   </ion-item>
 
-  <ion-item>
-    <ion-label position="stacked">Icons</ion-label>
-    <ion-grid>
-      <ion-row class="ion-justify-items-center">
-        <ion-col size="4" *ngFor="let i of this?.icons" class="center">
-          <ion-icon (click)="selectedIcon(i)" [color]="this.selected == i ? 'success':'dark'" class="ion-margin"
-            size="large" [name]="i"></ion-icon>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-item>
-
-
+  <ion-label position="stacked">Icons</ion-label>
+  <ion-segment [scrollable]="true" value="icon">
+    <ion-segment-button (click)="selectedIcon(i)" [value]="i" *ngFor="let i of this?.icons" class="center">
+      <ion-icon size="large" [color]="this.selected == i ? 'success':'dark'" [name]="i"></ion-icon>
+    </ion-segment-button>
+  </ion-segment>
 
 </ion-content>
 

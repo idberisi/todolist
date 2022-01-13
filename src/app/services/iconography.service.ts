@@ -11047,7 +11047,11 @@ export class IconographyService {
   }
 
   public async setNames() {
-    const flatNames:string[] = await this.iconData.icons.map(x => x.name);
+    let flatNames:string[] = await this.iconData.icons.map((x:any) => { 
+      return !x.name.endsWith('-sharp') ? !x.name.endsWith('-outline') ? x.name : '' : ''  
+    } );
+    flatNames = flatNames.filter(n => n);
+    console.log(flatNames)
     this.storage.set(ICONKEY,flatNames);
   }
 }
