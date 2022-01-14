@@ -24,15 +24,15 @@ export class HomePage implements OnInit, AfterViewInit {
     private newService: NewserviceService,
     private toastController: ToastController,
     private ref: ChangeDetectorRef,
-    private zone:NgZone,
-    private user:UserService,
-    private api:ApiService,
+    private zone: NgZone,
+    private user: UserService,
+    private api: ApiService,
   ) {
     this.newService.todoObservable.subscribe((items: todoItem[]) => {
-      this.zone.run(()=>{
+      this.zone.run(() => {
         this.items = items;
       })
-      
+
     })
   }
 
@@ -41,10 +41,10 @@ export class HomePage implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    
+
   }
 
-  public activeItem:any = false;
+  public activeItem: any = false;
   public items: todoItem[] = [];
   public text: string = '';
   public description: string = '';
@@ -61,7 +61,7 @@ export class HomePage implements OnInit, AfterViewInit {
       if (data.data != false) {
         let newItem: todoItem = data.data;
         this.newService.addItem(newItem);
-        this.toast('New Task Added','success')
+        this.toast('New Task Added', 'success')
       }
     });
     return await modal.present();
@@ -84,23 +84,23 @@ export class HomePage implements OnInit, AfterViewInit {
         this.items[index].c = data.data[1];
         this.newService.save();
       } else {
-        this.toast("Task removed",'danger')
+        this.toast("Task removed", 'danger')
       }
     });
     return await modal.present();
   }
 
   public async social(item) {
-    this.slidingItems.closeOpened().then(()=>{
+    this.slidingItems.closeOpened().then(() => {
       Share.share({
         title: item.t + (item.c ? ' [COMPLETE]' : ' [TODO]'),
-        text: 'Title:' + item.t + "\r\nStatus: " + (item.c ? 'Complete' : 'Incomplete') + "\r\nDescripton: " + item.d + "\r\nCreated: " + item.cr + (item.c ?  "\r\nCompleted:: " + item.co : ''),
+        text: 'Title:' + item.t + "\r\nStatus: " + (item.c ? 'Complete' : 'Incomplete') + "\r\nDescripton: " + item.d + "\r\nCreated: " + item.cr + (item.c ? "\r\nCompleted:: " + item.co : ''),
         dialogTitle: 'Share this task',
       })
     })
   }
 
-  private async toast(message:string,color:any = false) {
+  private async toast(message: string, color: any = false) {
     return await this.toastController.create({
       message: message,
       position: "bottom",
@@ -113,7 +113,7 @@ export class HomePage implements OnInit, AfterViewInit {
 
   public removeItem(index) {
     this.newService.removeItem(index);
-    this.toast('Task Removed','danger');
+    this.toast('Task Removed', 'danger');
   }
 
   public edit(index) {
@@ -122,7 +122,7 @@ export class HomePage implements OnInit, AfterViewInit {
 
       this.presentEditModal(index);
 
- /*      this.router.navigateByUrl('detail/' + index) */
+      /*      this.router.navigateByUrl('detail/' + index) */
     })
 
   }
@@ -131,40 +131,40 @@ export class HomePage implements OnInit, AfterViewInit {
     switch (item.p) {
       case 'ellipse-outline':
         return 'success';
-      break;
+        break;
       case 'alert-circle-outline':
         return 'warning';
-      break;
+        break;
       case 'flame-outline':
         return 'danger';
-      break;
+        break;
     }
   }
 
   getP(item) {
-    if(!item.c) {
+    if (!item.c) {
       switch (item.p) {
         case 'ellipse-outline':
           return 'low';
-        break;
+          break;
         case 'alert-circle-outline':
           return 'medium';
-        break;
+          break;
         case 'flame-outline':
           return 'high';
-        break;
+          break;
       }
     } else {
       return 'dark';
     }
-    
+
   }
 
   async details(item) {
 
-    const created:string = new Date(item.cr).toDateString();
-    const complete:string = new Date(item.co).toDateString();
-    const due:string = new Date(item.due).toDateString();
+    const created: string = new Date(item.cr).toDateString();
+    const complete: string = new Date(item.co).toDateString();
+    const due: string = new Date(item.due).toDateString();
 
     const alert = await this.alertController.create({
       cssClass: item.co < item.due ? 'alert-ok' : 'alert-bad',
@@ -180,18 +180,18 @@ export class HomePage implements OnInit, AfterViewInit {
     console.log('onDidDismiss resolved with role', role);
   }
 
-  setItem(item:todoItem) {
+  setItem(item: todoItem) {
     this.activeItem = item;
   }
 
-  public toggleState(item,i,e) {
+  public toggleState(item, i, e) {
 
     let state: boolean = e.detail.checked;
     item.c = state;
     this.items[i] = item;
 
     this.slidingItems.closeOpened().then(() => {
-      this.toast('Task ' + (state ? 'Completed' : 'Incomplete') , state ? 'success' : 'warning');
+      this.toast('Task ' + (state ? 'Completed' : 'Incomplete'), state ? 'success' : 'warning');
       if (state) {
         this.items[i].co = new Date().getTime();
       } else {
@@ -244,12 +244,11 @@ export class HomePage implements OnInit, AfterViewInit {
 
   private async processDownload(items: any) {
     if (items) {
-      await Filesystem.writeFile({
-        path: 'items.json',
-        data: JSON.stringify(items),
-        directory: Directory.Documents,
-        encoding: Encoding.UTF8,
-      });
+      let js = JSON.stringify(items);
+      Share.share({
+        text: js,
+        dialogTitle: 'Export List',
+      })
     }
   }
 
