@@ -31,7 +31,13 @@ export class HomePage implements OnInit, AfterViewInit {
     this.newService.todoObservable.subscribe((items: todoItem[]) => {
       this.zone.run(() => {
         this.items = items;
+        
       })
+      try {
+        this.progress();
+      } catch(e) {
+        console.error(e)
+      }
 
     })
   }
@@ -50,6 +56,7 @@ export class HomePage implements OnInit, AfterViewInit {
   public description: string = '';
   public edit_index: number = -1;
   public hidden: boolean = false;
+  public percentage:number =  0;
 
   async presentModal() {
     const modal = await this.modalController.create({
@@ -261,6 +268,21 @@ export class HomePage implements OnInit, AfterViewInit {
       });
 
     }
+  }
+
+  progress() {
+    let completedTasks = 0;
+    this.items.forEach( x => {
+      if(x.c) {
+        completedTasks++;
+      }
+    })
+    if(this.items.length > 0) {
+      this.percentage = completedTasks / this.items.length;
+    } else {
+      this.percentage = 0;
+    }
+    console.log(this.percentage)
   }
 
   public async export() {
