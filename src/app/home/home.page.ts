@@ -247,7 +247,7 @@ export class HomePage implements OnInit, AfterViewInit {
       await Filesystem.writeFile({
         path: 'items.json',
         data: JSON.stringify(items),
-        directory: Directory.Data,
+        directory: Directory.Documents,
         encoding: Encoding.UTF8,
       });
     }
