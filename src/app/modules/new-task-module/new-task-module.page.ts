@@ -54,38 +54,31 @@ export class NewTaskModulePage implements OnInit {
   ionViewDidEnter(){
     this.iconService.getNames().then((icons:any) => {
       this.icons = icons;
-      console.log(icons);
       this.iconsLoaded = true;
     });
   }
 
   public changeTitle(e){
-    console.log('Title',e.detail.value);
     this.title=e.detail.value;
   }
 
   public changeDescription(e){
-    console.log('Description',e.detail.value);
     this.description=e.detail.value;
   }
 
   public changeIcon(e) {
-    console.log('Description',e.detail.value);
     this.icon = e.detail.value;
   }
 
   public changePriority(e) {
-    console.log('Priority',e.detail.value);
     this.priority = e.detail.value;
     this.levelname = this.setLevel();
 
   } 
 
   public changeDue(e) {
-    console.log('Due',e.detail.value);
     let D = Date.parse(e.detail.value);
     this.due = D / 1000;
-    console.log(this.due);
   }
 
   public addNew(){
@@ -101,8 +94,6 @@ export class NewTaskModulePage implements OnInit {
       co: false,
       due: this.due,
     };
-    console.log(item);
-    // this.dismiss(item);
     this.modalController.dismiss(item);
   }
 

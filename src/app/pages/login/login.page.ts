@@ -18,8 +18,8 @@ export class LoginPage implements OnInit {
     private router:Router,
   ) { }
 
-  public pass:string = "";
-  public username:string = "";
+  public pass:string = "test1234";
+  public username:string = "deano";
   public error:string = "";
 
   ngOnInit() {

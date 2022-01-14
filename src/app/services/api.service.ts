@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
+import { Http, HttpResponse, HttpHeaders } from '@capacitor-community/http';
 
 @Injectable({
   providedIn: 'root'
@@ -8,21 +9,56 @@ import { environment } from '../../environments/environment';
 export class ApiService {
 
   constructor(
-    private http: HttpClient,
+    private httpClient: HttpClient,
   ) { }
 
-  public apicall(url: string, data: any, token: any = false) {
+  fallback(url, data, headers) {
+
+    let header: HttpHeaders = headers.headers;
+    console.log(header);
+
     return new Promise((resolve, reject) => {
-      if (token) {
-        this.http.post( environment.serverUrl + url, data, { headers: { Authorization: 'Bearer ' + token } }).subscribe((data: any) => {
-          resolve(data);
-        });
-      } else {
-        this.http.post( environment.serverUrl + url, data, {}).subscribe((data: any) => {
-          resolve(data);
-        });
-      }
+      Http.request({
+        method: 'POST',
+        url: environment.serverUrl + url,
+        data: data,
+        headers: header
+      }).then((response: HttpResponse) => {
+        resolve( response.data );
+      }).catch(e => {
+        reject(e);
+      });
     });
+
+  }
+
+  public async apicall(url: string, data: any, token: any = false) {
+
+    let headers: any = {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept': 'application/json'
+      }
+    }
+    if (token) {
+      headers = {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ' + token
+        }
+      };
+    }
+
+    console.log(headers);
+
+    const response: any = await this.fallback(url, data, headers);
+    return response;
+    /* this.httpClient.post(environment.serverUrl + url, data, headers).subscribe((data: any) => {
+      resolve(data);
+    }); */
+
+
   }
 
 }

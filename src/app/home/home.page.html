@@ -3,8 +3,8 @@
 
     <ion-buttons slot="start">
       <ion-button (click)="hideComplete()">
-        <ion-icon *ngIf="this.hidden" name="eye-off-outline"></ion-icon>
-        <ion-icon *ngIf="!this.hidden" name="eye-outline"></ion-icon>
+        <ion-icon color="dark" *ngIf="this.hidden" name="eye-off"></ion-icon>
+        <ion-icon color="dark" *ngIf="!this.hidden" name="eye"></ion-icon>
       </ion-button>
     </ion-buttons>
 
@@ -14,10 +14,10 @@
 
     <ion-buttons slot="end">
       <ion-button (click)="export()">
-        <ion-icon name="download-outline"></ion-icon>
+        <ion-icon color="dark" name="download"></ion-icon>
       </ion-button>
       <ion-button (click)="presentModal()">
-        <ion-icon name="add-circle-outline"></ion-icon>
+        <ion-icon color="dark" name="add-circle"></ion-icon>
       </ion-button>
     </ion-buttons>
 
@@ -40,7 +40,7 @@
 
       <ion-item-options side="start">
         <ion-item-option [color]="item.c ? 'success':'light' ">
-          <ion-checkbox #checkboxes (ionChange)="toggleState(item,i,$event)"></ion-checkbox>
+          <ion-checkbox #checkboxes [checked]="item.c" (ionChange)="toggleState(item,i,$event)"></ion-checkbox>
         </ion-item-option>
       </ion-item-options>
 
@@ -51,31 +51,26 @@
         </div>
 
         <ion-list>
-          <ion-text class="title" >{{item.t}}</ion-text>
+          <ion-text class="title">{{item.t}}</ion-text>
           <br>
-          <ion-text class="subtitle" >{{item.d}}</ion-text>
+          <ion-text class="subtitle">{{item.d}}</ion-text>
         </ion-list>
 
-        <div slot="end">
-       
-          <ion-button shape="round" fill="none" (click)="details(item)">
-            <ion-icon slot="icon-only" name="calendar" [color]="item.c ? 'success':'primary' "></ion-icon>
-          </ion-button>
-        </div>
-
-        
+        <ion-button slot="end" shape="round" fill="none" (click)="details(item)">
+          <ion-icon slot="icon-only" [name]="item.c ? 'checkmark-circle':'calendar'" [color]="item.c ? 'success':'dark' "></ion-icon>
+        </ion-button>
 
       </ion-item>
 
       <ion-item-options side="end">
         <ion-item-option color='light' (click)="social(item)">
-          <ion-icon name="share-social-outline"></ion-icon>
+          <ion-icon size="large" name="share-social-outline"></ion-icon>
         </ion-item-option>
         <ion-item-option color='primary' (click)="edit(i)">
-          <ion-icon name="create-outline"></ion-icon>
+          <ion-icon size="large" name="create-outline"></ion-icon>
         </ion-item-option>
         <ion-item-option color='danger' (click)="removeAlert(i)">
-          <ion-icon name="trash"></ion-icon>
+          <ion-icon size="large" name="trash"></ion-icon>
         </ion-item-option>
       </ion-item-options>
 

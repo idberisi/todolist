@@ -7,7 +7,6 @@ import { NewserviceService, todoItem } from '../newservice.service';
 import { ModalController } from '@ionic/angular';
 import { NewTaskModulePage } from '../modules/new-task-module/new-task-module.page';
 import { Share } from '@capacitor/share';
-import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 
 @Component({
   selector: 'app-home',
@@ -86,7 +85,6 @@ export class HomePage implements OnInit, AfterViewInit {
     modal.onDidDismiss().then((data: any) => {
       this.ref.detectChanges();
       if (data.data != false) {
-        console.log(data);
         this.items[index] = data.data[0];
         this.items[index].c = data.data[1];
         this.newService.save();
@@ -184,7 +182,6 @@ export class HomePage implements OnInit, AfterViewInit {
     await alert.present();
 
     const { role } = await alert.onDidDismiss();
-    console.log('onDidDismiss resolved with role', role);
   }
 
   setItem(item: todoItem) {
@@ -220,7 +217,7 @@ export class HomePage implements OnInit, AfterViewInit {
           cssClass: 'secondary',
           id: 'cancel-button',
           handler: (blah) => {
-            //console.log('Confirm Cancel: blah');
+            return true;
           }
         }, {
           text: 'Yes',
@@ -282,12 +279,10 @@ export class HomePage implements OnInit, AfterViewInit {
     } else {
       this.percentage = 0;
     }
-    console.log(this.percentage)
   }
 
   public async export() {
     const token = await this.user.getToken();
-    console.log(token);
     this.api.apicall('auth/getList', {}, token).then((ii: any) => {
       this.processDownload(ii);
     });

@@ -32,7 +32,6 @@ export class TabsComponent {
 
   public async export() {
     const token = await this.user.getToken();
-    console.log(token);
     this.api.apicall('auth/getList', {}, token).then((ii: any) => {
       this.processDownload(ii);
     });

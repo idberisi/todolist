@@ -39,25 +39,41 @@ export class NewserviceService {
     })
   }
 
-  private async checkAPI() {
-    this.user.getToken().then((token: string) => {
-      this.api.apicall('auth/getList', {}, token).then((listData: any) => {
-        this.items = listData;
-        this.save();
-      }).finally(() => {
-        return true;
-      })
+  checkAPI(token) {    
+    return new Promise((resolve,reject)=>{
+      this.api.apicall('auth/getList', {}, token).then((listData:any)=>{
+        resolve(listData);
+      }).catch(()=>{
+        reject([]);
+      });
+    
     });
+    
+    //this.items = listData;
+    //await this.save();  
+
   }
 
   public async getItems() {
-    this.checkAPI().then(()=>{
-      let items:any = this.todoListStorage.get();
+    const token:string = await this.user.getToken();
+    const json:any = await this.checkAPI(token);
+
+    if(json) {
+      let items:any = JSON.parse(json);
+      console.log("TYPE",typeof(items));
+      if(typeof(items) === "object") {
+        this.items = items;
+      } else {
+        this.items = [];
+      }
+      this.todoObservable.next(this.items);
+      await this.save();
+    } else {
+      let items:any = await this.todoListStorage.get();
       this.items = items;
       this.todoObservable.next(items);
-    }).finally(()=>{
-      return this.items;
-    })
+    }
+    
   }
 
   public getDetail(index) {
@@ -94,9 +110,7 @@ export class NewserviceService {
     };
 
     await this.todoListStorage.set(this.items);
+    await this.api.apicall('auth/setList', data, token);
     this.todoObservable.next(this.items);
-    this.api.apicall('auth/setList', data, token).then((res: any) => {
-      console.log("res", res);
-    })
   }
 }

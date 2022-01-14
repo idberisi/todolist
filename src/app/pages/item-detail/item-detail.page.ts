@@ -56,11 +56,7 @@ export class ItemDetailPage implements OnInit, AfterViewInit {
 
   
   ngAfterViewInit() {
-
-    //this.todoStorage.setCurrent(this.item);
-
     this.completed.ionChange.subscribe((v:any)=>{
-      console.log(v)
       this.chkd = v.detail.checked;
       if(v.detail.checked) {
         this.item.co = new Date().getTime();
@@ -71,17 +67,13 @@ export class ItemDetailPage implements OnInit, AfterViewInit {
 
     let dateTime = new Date(this.item.due).toISOString().replace("Z","");
     let dateTimeEpoch = Date.parse(dateTime);
-    console.log(dateTime, dateTimeEpoch)
     this.datetime.value = dateTime;
-
-    
     
   }
 
   ionViewWillEnter(){
     this.iconService.getNames().then((icons:any) => {
       this.icons = icons;
-      console.log(icons);
       this.iconsLoaded = true;
     });
 
@@ -89,30 +81,24 @@ export class ItemDetailPage implements OnInit, AfterViewInit {
   }
 
   changeState(e) {
-    console.log('state',e.detail.checked);
     this.item.c = e.detail.checked;
   }
   
   changePriority(e) {
-    console.log('Priority',e.detail.value);
     this.item.p = e.detail.value;
     this.levelname = this.setLevel();
   }
 
   public changeDue(e) {
-    console.log('Due',e.detail.value);
     let D = Date.parse(e.detail.value);
     this.item.due = D;
-    console.log(this.item.due);
   }
 
   public changeTitle(e){
-    console.log('Title',e.detail.value);
     this.item.t=e.detail.value;
   }
 
   public changeDescription(e){
-    console.log('Description',e.detail.value);
     this.item.d=e.detail.value;
   }
 
@@ -150,7 +136,7 @@ export class ItemDetailPage implements OnInit, AfterViewInit {
           cssClass: 'secondary',
           id: 'cancel-button',
           handler: (blah) => {
-            //console.log('Confirm Cancel: blah');
+            return true;
           }
         }, {
           text: 'Yes',

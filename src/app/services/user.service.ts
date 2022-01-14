@@ -16,7 +16,8 @@ export class UserService {
   }
 
   public async getToken(){
-    return await this.storage.get(TOKENKEY)
+    const token:string = await this.storage.get(TOKENKEY);
+    return token;
   }
 
 }
