@@ -48,10 +48,12 @@
         </div>
 
         <ion-list>
-          <ion-text class="title" [color]="item.c ? 'success':'' ">{{item.t}}</ion-text>
+          <ion-text class="title" >{{item.t}}</ion-text>
           <br>
-          <ion-text class="subtitle" [color]="item.c ? 'success':'' ">{{item.d}}</ion-text>
+          <ion-text class="subtitle" >{{item.d}}</ion-text>
         </ion-list>
+
+        <ion-icon [hidden]="!item.c" slot="end" name="checked-circle" color="success"></ion-icon>
 
         <ion-button slot="end" shape="round" fill="none" (click)="details(item)">
           <ion-icon slot="icon-only" name="calendar" [color]="item.c ? 'success':'primary' "></ion-icon>
