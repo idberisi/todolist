@@ -1,6 +1,6 @@
 import { IconographyService } from './../../services/iconography.service';
-import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { IonSelect, IonText, ModalController } from '@ionic/angular';
 import { todoItem } from 'src/app/newservice.service';
 
 @Component({
@@ -10,6 +10,9 @@ import { todoItem } from 'src/app/newservice.service';
 })
 
 export class NewTaskModulePage implements OnInit {
+
+  @ViewChild('select') select:IonSelect;
+
   public description:string="";
   public title:string="";
   public icon:string="";
@@ -17,6 +20,9 @@ export class NewTaskModulePage implements OnInit {
   public icons:any = [];
   public selected:string = '';
   public due:any = false;
+  public levelname:string = '';
+
+  public iconsLoaded:boolean = false;
 
   constructor(
     private modalController:ModalController,
@@ -24,18 +30,33 @@ export class NewTaskModulePage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.iconService.getNames().then((icons:any) => {
-      this.icons = icons;
-      console.log(icons);
-    });
+
+  }
+
+  setLevel() {
+    switch (this.priority) {
+      case 'ellipse-outline':
+        return 'low';
+      break;
+      case 'alert-circle-outline':
+        return 'medium';
+      break;
+      case 'flame-outline':
+        return 'high';
+      break;
+    }
   }
 
   selectedIcon(icon) {
     this.selected = icon;
   }
 
-  ionViewWillEnter(){
-    
+  ionViewDidEnter(){
+    this.iconService.getNames().then((icons:any) => {
+      this.icons = icons;
+      console.log(icons);
+      this.iconsLoaded = true;
+    });
   }
 
   public changeTitle(e){
@@ -56,6 +77,8 @@ export class NewTaskModulePage implements OnInit {
   public changePriority(e) {
     console.log('Priority',e.detail.value);
     this.priority = e.detail.value;
+    this.levelname = this.setLevel();
+
   } 
 
   public changeDue(e) {
@@ -81,6 +104,10 @@ export class NewTaskModulePage implements OnInit {
     console.log(item);
     // this.dismiss(item);
     this.modalController.dismiss(item);
+  }
+
+  changeP() {
+    this.select.open();
   }
 
   public dismiss() {

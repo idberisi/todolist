@@ -1,8 +1,8 @@
 import { IconographyService } from './../../services/iconography.service';
 import { TodolistServiceService } from './../../todolist-service.service';
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AlertController, IonToggle, NavController } from '@ionic/angular';
+import { AlertController, IonToggle, NavController, ModalController, IonDatetime, IonSelect } from '@ionic/angular';
 import { NewserviceService,todoItem } from 'src/app/newservice.service';
 
 @Component({
@@ -14,11 +14,20 @@ export class ItemDetailPage implements OnInit, AfterViewInit {
 
   @ViewChild('completed') completed:IonToggle;
   @ViewChild('tabs') tabs:ElementRef;
+  @ViewChild('dt') datetime: IonDatetime;
+  @ViewChild('select') select:IonSelect;
 
-  public item:todoItem;
-  public index:any;
+  //public item:todoItem;
+  //public index:any;
   public icons:string[] = [];
   public selected:string = '';
+  public iconsLoaded:boolean = false;
+  public levelname:string = '';
+
+  public chkd:boolean = false;
+
+  @Input() item: any;
+  @Input() index: number;
 
   constructor(
     private alertController:AlertController,
@@ -27,22 +36,32 @@ export class ItemDetailPage implements OnInit, AfterViewInit {
     private todoStorage:TodolistServiceService,
     private nav:NavController,
     private iconService:IconographyService,
-    ) {     
+    private modalController:ModalController,
+
+    ) {  
+      
+      
+
     }
 
   ngOnInit() {
-    this.index=this.activatedRoute.snapshot.paramMap.get('index');
-    this.item=this.newService.getDetail(this.index);
-    this.todoStorage.setCurrent(this.item);
+/*     this.index=this.activatedRoute.snapshot.paramMap.get('index');
+    this.item=this.newService.getDetail(this.index); */
+   
     this.iconService.getNames().then((names:any)=>{
       if(names) {this.icons = names}
     });
+
   }
 
+  
   ngAfterViewInit() {
+
+    //this.todoStorage.setCurrent(this.item);
+
     this.completed.ionChange.subscribe((v:any)=>{
       console.log(v)
-      this.item.c = v.detail.checked;
+      this.chkd = v.detail.checked;
       if(v.detail.checked) {
         this.item.co = new Date().getTime();
       } else {
@@ -50,14 +69,74 @@ export class ItemDetailPage implements OnInit, AfterViewInit {
       }
     })
 
+    let dateTime = new Date(this.item.due).toISOString().replace("Z","");
+    let dateTimeEpoch = Date.parse(dateTime);
+    console.log(dateTime, dateTimeEpoch)
+    this.datetime.value = dateTime;
+
+    
     
   }
 
-  public async updateItem(){
+  ionViewWillEnter(){
+    this.iconService.getNames().then((icons:any) => {
+      this.icons = icons;
+      console.log(icons);
+      this.iconsLoaded = true;
+    });
 
-    console.log(this.item);
+    this.levelname = this.setLevel();
+  }
+
+  changeState(e) {
+    console.log('state',e.detail.checked);
+    this.item.c = e.detail.checked;
+  }
+  
+  changePriority(e) {
+    console.log('Priority',e.detail.value);
+    this.item.p = e.detail.value;
+    this.levelname = this.setLevel();
+  }
+
+  public changeDue(e) {
+    console.log('Due',e.detail.value);
+    let D = Date.parse(e.detail.value);
+    this.item.due = D;
+    console.log(this.item.due);
+  }
+
+  public changeTitle(e){
+    console.log('Title',e.detail.value);
+    this.item.t=e.detail.value;
+  }
+
+  public changeDescription(e){
+    console.log('Description',e.detail.value);
+    this.item.d=e.detail.value;
+  }
+
+  changeP() {
+    this.select.open();
+  }
+
+  setLevel() {
+    switch (this.item.p) {
+      case 'ellipse-outline':
+        return 'low';
+      break;
+      case 'alert-circle-outline':
+        return 'medium';
+      break;
+      case 'flame-outline':
+        return 'high';
+      break;
+    }
+  }
+
+  public async updateItem(){
     this.newService.updateItem(this.item,this.index);
-    this.nav.back();
+    this.modalController.dismiss([this.item,this.chkd]);
   }
 
   async removeAlert() {
@@ -87,7 +166,7 @@ export class ItemDetailPage implements OnInit, AfterViewInit {
 
   public removeItem(){
     this.newService.removeItem(this.index);
-    this.nav.back();
+    this.modalController.dismiss(false);
   }
 
   public updateItemDetail() {

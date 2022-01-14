@@ -9,7 +9,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 class myErrorHandler implements ErrorHandler {
   handleError(err: Error): void {
-    console.error(err.message,err);
+    console.error(err.message,err.name,err.stack);
   }
 } 
 

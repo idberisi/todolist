@@ -59,3 +59,28 @@
 .icons ion-icon {
   margin: 5pt;
 }
+
+.sliderItem {
+  border-width: 0 0 0 2pt;
+  border-style: solid;
+}
+
+.sliderItem.low {
+  border-color: var(--ion-color-medium) !important;
+}
+
+.sliderItem.medium {
+  border-color: var(--ion-color-warning) !important;
+}
+
+.sliderItem.high {
+  border-color: var(--ion-color-danger) !important;
+}
+
+.title {
+  font-size: 1.2rem;
+}
+
+.subtitle {
+  font-size: 0.9rem;
+}

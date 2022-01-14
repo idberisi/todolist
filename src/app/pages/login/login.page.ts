@@ -22,8 +22,15 @@ export class LoginPage implements OnInit {
   public username:string = "";
   public error:string = "";
 
-
   ngOnInit() {
+  }
+
+  ionViewWillEnter(){
+    this.user.getToken().then((token:any)=>{
+      if(token) {
+        this.router.navigateByUrl('/home',{replaceUrl:true});
+      }
+    })
   }
 
   login(){

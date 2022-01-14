@@ -1,5 +1,6 @@
+import { ItemDetailPage } from './../pages/item-detail/item-detail.page';
 import { Router } from '@angular/router';
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, NgZone, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { AlertController, IonItemSliding, ToastController } from '@ionic/angular';
 import { NewserviceService, todoItem } from '../newservice.service';
 import { ModalController } from '@ionic/angular';
@@ -11,7 +12,7 @@ import { Share } from '@capacitor/share';
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage implements OnInit {
+export class HomePage implements OnInit, AfterViewInit {
 
   @ViewChild('slidingItems') slidingItems: IonItemSliding;
 
@@ -20,16 +21,23 @@ export class HomePage implements OnInit {
     private alertController: AlertController,
     private newService: NewserviceService,
     private toastController: ToastController,
-    private router: Router,
     private ref: ChangeDetectorRef,
+    private zone:NgZone,
   ) {
     this.newService.todoObservable.subscribe((items: todoItem[]) => {
-      this.items = items;
+      this.zone.run(()=>{
+        this.items = items;
+      })
+      
     })
   }
 
   ngOnInit() {
     this.newService.getItems();
+  }
+
+  ngAfterViewInit() {
+    
   }
 
   public activeItem:any = false;
@@ -49,7 +57,30 @@ export class HomePage implements OnInit {
       if (data.data != false) {
         let newItem: todoItem = data.data;
         this.newService.addItem(newItem);
-        this.toast('New Task Added')
+        this.toast('New Task Added','success')
+      }
+    });
+    return await modal.present();
+  }
+
+  async presentEditModal(index) {
+    const modal = await this.modalController.create({
+      component: ItemDetailPage,
+      componentProps: {
+        'item': this.items[index],
+        'index': index
+      }
+    });
+
+    modal.onDidDismiss().then((data: any) => {
+      this.ref.detectChanges();
+      if (data.data != false) {
+        console.log(data);
+        this.items[index] = data.data[0];
+        this.items[index].c = data.data[1];
+        this.newService.save();
+      } else {
+        this.toast("Task removed",'danger')
       }
     });
     return await modal.present();
@@ -65,10 +96,11 @@ export class HomePage implements OnInit {
     })
   }
 
-  private async toast(message) {
+  private async toast(message:string,color:any = false) {
     return await this.toastController.create({
       message: message,
       position: "bottom",
+      color: color ? color : '',
       duration: 3000
     }).then(TOAST => {
       TOAST.present();
@@ -77,13 +109,16 @@ export class HomePage implements OnInit {
 
   public removeItem(index) {
     this.newService.removeItem(index);
-    this.toast('Task Removed');
+    this.toast('Task Removed','danger');
   }
 
   public edit(index) {
 
     this.slidingItems.closeOpened().then(() => {
-      this.router.navigateByUrl('detail/' + index)
+
+      this.presentEditModal(index);
+
+ /*      this.router.navigateByUrl('detail/' + index) */
     })
 
   }
@@ -102,27 +137,65 @@ export class HomePage implements OnInit {
     }
   }
 
+  getP(item) {
+    if(!item.c) {
+      switch (item.p) {
+        case 'ellipse-outline':
+          return 'low';
+        break;
+        case 'alert-circle-outline':
+          return 'medium';
+        break;
+        case 'flame-outline':
+          return 'high';
+        break;
+      }
+    } else {
+      return 'dark';
+    }
+    
+  }
+
+  async details(item) {
+
+    const created:string = new Date(item.cr).toDateString();
+    const complete:string = new Date(item.co).toDateString();
+    const due:string = new Date(item.due).toDateString();
+
+    const alert = await this.alertController.create({
+      cssClass: item.co < item.due ? 'alert-ok' : 'alert-bad',
+      header: 'Created: ' + created,
+      subHeader: item.co ? 'Completed: ' + complete : 'Incomplete',
+      message: item.due ? 'Due: ' + due : 'No due date',
+      buttons: ['OK']
+    });
+
+    await alert.present();
+
+    const { role } = await alert.onDidDismiss();
+    console.log('onDidDismiss resolved with role', role);
+  }
+
   setItem(item:todoItem) {
     this.activeItem = item;
   }
 
-  public toggleState(index) {
+  public toggleState(item,i,e) {
 
-    let state: boolean = !this.items[index].c;
+    let state: boolean = e.detail.checked;
+    item.c = state;
+    this.items[i] = item;
 
     this.slidingItems.closeOpened().then(() => {
-      this.toast('Task ' + (state ? 'Completed' : 'Incomplete'));
-    
+      this.toast('Task ' + (state ? 'Completed' : 'Incomplete') , state ? 'success' : 'warning');
       if (state) {
-        this.items[index].co = new Date().getTime();
+        this.items[i].co = new Date().getTime();
       } else {
-        this.items[index].co = false;
+        this.items[i].co = false;
       }
-
-      this.newService.markAsComplete(index, state);
+      this.newService.markAsComplete(i, state);
       this.newService.save()
     })
-
   }
 
   async removeAlert(index) {

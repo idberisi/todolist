@@ -22,8 +22,8 @@
       <ion-item slot="header">
         <ion-label>Due Date</ion-label>
       </ion-item>
-      <ion-list slot="content">
-        <ion-datetime (ionChange)="changeDue($event)"></ion-datetime>
+      <ion-list slot="content" class="text-center fw">
+        <ion-datetime  (ionChange)="changeDue($event)"></ion-datetime>
       </ion-list>
     </ion-accordion>
 
@@ -32,23 +32,26 @@
         <ion-label>Priority</ion-label>
       </ion-item>
       <ion-list slot="content">
-        <ion-select (ionChange)='changePriority($event)'>
-          <ion-select-option>Task Priority</ion-select-option>
-          <ion-select-option value="ellipse-outline">Low</ion-select-option>
-          <ion-select-option value="alert-circle-outline">Medium</ion-select-option>
-          <ion-select-option value="flame-outline">High</ion-select-option>
-        </ion-select>
+        <ion-item>
+          <ion-icon slot="start" *ngIf="this?.priority" [name]="this.priority ? this.priority : ''"></ion-icon>
+          <ion-text class="ucword">{{this.levelname}}</ion-text>
+          <ion-button slot="end" (click)="changeP()" >Edit</ion-button>
+        </ion-item>
       </ion-list>
     </ion-accordion>
 
-    <ion-accordion value="icon">
+    <ion-accordion  value="icon">
       <ion-item slot="header">
         <ion-label>Icon</ion-label>
       </ion-item>
 
-      <ion-list slot="content">
+      
 
-        <ion-segment [scrollable]="true" value="icon">
+      <ion-list slot="content" >
+
+        <ion-spinner name="dots" *ngIf="!this.iconsLoaded"></ion-spinner>
+
+        <ion-segment [scrollable]="true" value="icon" *ngIf="this.iconsLoaded">
           <ion-segment-button (click)="selectedIcon(i)" [value]="i" *ngFor="let i of this?.icons" class="center">
             <ion-icon class="ion-padding" [color]="this.selected == i ? 'success':'dark'" [name]="i"></ion-icon>
           </ion-segment-button>
@@ -56,7 +59,7 @@
 
       </ion-list>
     </ion-accordion>
-    
+
   </ion-accordion-group>
 
 </ion-content>
@@ -74,3 +77,9 @@
   </ion-tab-bar>
 
 </ion-footer>
+
+<ion-select #select hidden="true" (ionChange)='changePriority($event)'>
+  <ion-select-option value="ellipse-outline">Low</ion-select-option>
+  <ion-select-option value="alert-circle-outline">Medium</ion-select-option>
+  <ion-select-option value="flame-outline">High</ion-select-option>
+</ion-select>

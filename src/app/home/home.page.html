@@ -30,30 +30,33 @@
     </div>
   </div>
 
-  <ion-list>
-    <ion-item-sliding (click)="setItem(item)" #slidingItems *ngFor="let item of items;let i = index" [hidden]="shouldHide(item)">
+  <ion-list class="ion-no-margin ion-no-padding">
+    <ion-item-sliding class="sliderItem no-lines" [class.low]="getP(item) == 'low'"
+      [class.medium]="getP(item) == 'medium'" [class.high]="getP(item) == 'high'" (click)="setItem(item)" #slidingItems
+      *ngFor="let item of items;let i = index" [hidden]="shouldHide(item)">
 
       <ion-item-options side="start">
         <ion-item-option [color]="item.c ? 'success':'light' ">
-          <ion-checkbox (ionChange)="toggleState(i)" [checked]='item.c'></ion-checkbox>
+          <ion-checkbox #checkboxes (ionChange)="toggleState(item,i,$event)"></ion-checkbox>
         </ion-item-option>
       </ion-item-options>
 
-      <ion-item [color]="item.c ? 'success':'' ">
-        <div class="icons ion-margin-horizontal">
+      <ion-item>
+        <div class="icons ion-margin-right">
           <ion-icon *ngIf="item.i" [name]="item.i"></ion-icon>
           <ion-icon *ngIf="item.p" [name]="item.p" [color]="setColour(item)"></ion-icon>
         </div>
 
-        <ion-label>
-          <h2>{{item.t}}</h2>
-          <ion-note slot="end">
-            <h4>Set: {{item.cr | date:"d MMM y @ HH:mm:SS"}}</h4>
-            <h4 *ngIf="item.c">Due: {{item.due | date:"d MMM y @ HH:mm:SS"}}</h4>
-            <h4 *ngIf="item.c">Complete: {{item.co | date:"d MMM y @ HH:mm:SS"}}</h4>
-          </ion-note>
-          <p>{{item.d}}</p>
-        </ion-label>
+        <ion-list>
+          <ion-text class="title" [color]="item.c ? 'success':'' ">{{item.t}}</ion-text>
+          <br>
+          <ion-text class="subtitle" [color]="item.c ? 'success':'' ">{{item.d}}</ion-text>
+        </ion-list>
+
+        <ion-button slot="end" shape="round" fill="none" (click)="details(item)">
+          <ion-icon slot="icon-only" name="calendar" [color]="item.c ? 'success':'primary' "></ion-icon>
+        </ion-button>
+
       </ion-item>
 
       <ion-item-options side="end">
