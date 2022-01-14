@@ -1,11 +1,13 @@
+import { ApiService } from './../services/api.service';
+import { UserService } from './../services/user.service';
 import { ItemDetailPage } from './../pages/item-detail/item-detail.page';
-import { Router } from '@angular/router';
 import { ChangeDetectorRef, Component, NgZone, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { AlertController, IonItemSliding, ToastController } from '@ionic/angular';
 import { NewserviceService, todoItem } from '../newservice.service';
 import { ModalController } from '@ionic/angular';
 import { NewTaskModulePage } from '../modules/new-task-module/new-task-module.page';
 import { Share } from '@capacitor/share';
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 
 @Component({
   selector: 'app-home',
@@ -23,6 +25,8 @@ export class HomePage implements OnInit, AfterViewInit {
     private toastController: ToastController,
     private ref: ChangeDetectorRef,
     private zone:NgZone,
+    private user:UserService,
+    private api:ApiService,
   ) {
     this.newService.todoObservable.subscribe((items: todoItem[]) => {
       this.zone.run(()=>{
@@ -238,5 +242,23 @@ export class HomePage implements OnInit, AfterViewInit {
   }
 
 
+  private async processDownload(items: any) {
+    if (items) {
+      await Filesystem.writeFile({
+        path: 'items.json',
+        data: JSON.stringify(items),
+        directory: Directory.Data,
+        encoding: Encoding.UTF8,
+      });
+    }
+  }
+
+  public async export() {
+    const token = await this.user.getToken();
+    console.log(token);
+    this.api.apicall('auth/getList', {}, token).then((ii: any) => {
+      this.processDownload(ii);
+    });
+  }
 
 }

@@ -11051,7 +11051,6 @@ export class IconographyService {
       return !x.name.endsWith('-sharp') ? !x.name.endsWith('-outline') ? x.name : '' : ''  
     } );
     flatNames = flatNames.filter(n => n);
-    console.log(flatNames)
     this.storage.set(ICONKEY,flatNames);
   }
 }

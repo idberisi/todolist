@@ -1,8 +1,9 @@
 import { UserService } from './../../services/user.service';
 import { ApiService } from './../../services/api.service';
-import { Component, Input } from '@angular/core';
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 
+
+import { Component, Input } from '@angular/core';
 @Component({
   selector: 'app-tabs',
   templateUrl: './tabs.component.html',
@@ -35,7 +36,6 @@ export class TabsComponent {
     this.api.apicall('auth/getList', {}, token).then((ii: any) => {
       this.processDownload(ii);
     });
-
   }
 
 }
