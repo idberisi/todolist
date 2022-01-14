@@ -26,14 +26,20 @@
 
 <ion-content [fullscreen]="true">
 
-  <div class="arrowholder ion-no-margin ion-no-padding" *ngIf="this.items.length == 0">
+  <ion-item class="arrowholder ion-no-margin ion-no-padding" *ngIf="!this.loaded">
+    <div class="arrowHelp">
+      Loading <ion-spinner name="dots"></ion-spinner>
+    </div>
+  </ion-item>
+
+  <div class="arrowholder ion-no-margin ion-no-padding" *ngIf="this.loaded && this.items.length == 0">
     <ion-img class="positionArrow ion-no-margin ion-no-padding" src="../../assets/arrow.png"></ion-img>
     <div class="arrowHelp">
       <ion-text color="dakr">Add tasks to you list here</ion-text>
     </div>
   </div>
 
-  <ion-list class="ion-no-margin ion-no-padding">
+  <ion-list class="ion-no-margin ion-no-padding" *ngIf="this.loaded && this.items.length > 0">
     <ion-item-sliding class="sliderItem no-lines" [class.complete]="item.c" [class.low]="getP(item) == 'low'"
       [class.medium]="getP(item) == 'medium'" [class.high]="getP(item) == 'high'" (click)="setItem(item)" #slidingItems
       *ngFor="let item of items;let i = index" [hidden]="shouldHide(item)">

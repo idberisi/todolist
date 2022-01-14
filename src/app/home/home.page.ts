@@ -30,7 +30,7 @@ export class HomePage implements OnInit, AfterViewInit {
     this.newService.todoObservable.subscribe((items: todoItem[]) => {
       this.zone.run(() => {
         this.items = items;
-        
+        this.loaded = true;
       })
       try {
         this.progress();
@@ -56,6 +56,7 @@ export class HomePage implements OnInit, AfterViewInit {
   public edit_index: number = -1;
   public hidden: boolean = false;
   public percentage:number =  0;
+  public loaded:boolean = false;
 
   async presentModal() {
     const modal = await this.modalController.create({
