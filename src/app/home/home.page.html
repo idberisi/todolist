@@ -31,7 +31,7 @@
   </div>
 
   <ion-list class="ion-no-margin ion-no-padding">
-    <ion-item-sliding class="sliderItem no-lines" [class.low]="getP(item) == 'low'"
+    <ion-item-sliding class="sliderItem no-lines" [class.complete]="item.c" [class.low]="getP(item) == 'low'"
       [class.medium]="getP(item) == 'medium'" [class.high]="getP(item) == 'high'" (click)="setItem(item)" #slidingItems
       *ngFor="let item of items;let i = index" [hidden]="shouldHide(item)">
 
@@ -53,11 +53,14 @@
           <ion-text class="subtitle" >{{item.d}}</ion-text>
         </ion-list>
 
-        <ion-icon [hidden]="!item.c" slot="end" name="checked-circle" color="success"></ion-icon>
+        <div slot="end">
+       
+          <ion-button shape="round" fill="none" (click)="details(item)">
+            <ion-icon slot="icon-only" name="calendar" [color]="item.c ? 'success':'primary' "></ion-icon>
+          </ion-button>
+        </div>
 
-        <ion-button slot="end" shape="round" fill="none" (click)="details(item)">
-          <ion-icon slot="icon-only" name="calendar" [color]="item.c ? 'success':'primary' "></ion-icon>
-        </ion-button>
+        
 
       </ion-item>
 
