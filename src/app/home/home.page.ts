@@ -245,10 +245,21 @@ export class HomePage implements OnInit, AfterViewInit {
   private async processDownload(items: any) {
     if (items) {
       let js = JSON.stringify(items);
-      Share.share({
-        text: js,
-        dialogTitle: 'Export List',
+      const TT = await this.toastController.create({
+        message: "Preparing your data",
+        position: "bottom",
+        color: "warning"
       })
+
+      TT.present().then(()=>{
+        Share.share({
+          title: "Your Task Data",
+          text: js,
+          dialogTitle: 'Export List',
+        })
+        TT.dismiss();
+      });
+
     }
   }
 
