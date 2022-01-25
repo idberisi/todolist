@@ -35,6 +35,22 @@ export class NewserviceService {
   }
 
   private async checkAPI() {
+    
+    const token:string = await this.user.getToken();
+      
+    return new Promise((resolve,reject)=>{
+      this.api.apicall('auth/getList', {}, token).then((listData:any)=>{
+        resolve(listData);
+      }).catch(()=>{
+        reject([]);
+      });
+    
+    });
+    
+    /***
+    
+    // ORIGINAL FUNCTION
+    
     this.user.getToken().then((token: string) => {
       this.api.apicall('auth/getList', {}, token).then((listData: any) => {
         this.items = listData;
@@ -43,9 +59,35 @@ export class NewserviceService {
         return true;
       })
     });
+    */
+
   }
+    
 
   public async getItems() {
+    
+    const json:any = await this.checkAPI();
+    
+     if(json) {
+      let items:any = JSON.parse(json);
+      console.log("TYPE",typeof(items));
+      if(typeof(items) === "object") {
+        this.items = items;
+      } else {
+        this.items = [];
+      }
+      this.todoObservable.next(this.items);
+      await this.save();
+     } else {
+      let items:any = await this.todoListStorage.get();
+      this.items = items;
+      this.todoObservable.next(items);
+    }
+    
+    /** 
+    
+    ORIGINAL CODE 
+    
     this.checkAPI().then(()=>{
       let items:any = this.todoListStorage.get();
       this.items = items;
@@ -53,6 +95,9 @@ export class NewserviceService {
     }).finally(()=>{
       return this.items;
     })
+    
+    */
+    
   }
 
   public getDetail(index) {
