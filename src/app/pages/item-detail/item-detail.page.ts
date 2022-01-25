@@ -83,6 +83,10 @@ export class ItemDetailPage implements OnInit, AfterViewInit {
   changeState(e) {
     this.item.c = e.detail.checked;
   }
+
+  changeReminder(e){
+    this.item.remind = e.detail.checked;
+  }
   
   changePriority(e) {
     this.item.p = e.detail.value;

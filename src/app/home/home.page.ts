@@ -167,7 +167,7 @@ export class HomePage implements OnInit, AfterViewInit {
   }
 
   async details(item) {
-
+    console.log('Item',item);
     const created: string = new Date(item.cr).toDateString();
     const complete: string = new Date(item.co).toDateString();
     const due: string = new Date(item.due).toDateString();

@@ -21,6 +21,7 @@ export class NewTaskModulePage implements OnInit {
   public selected:string = '';
   public due:any = false;
   public levelname:string = '';
+  public remind:boolean = false;
 
   public iconsLoaded:boolean = false;
 
@@ -51,6 +52,10 @@ export class NewTaskModulePage implements OnInit {
     this.selected = icon;
   }
 
+  changeReminder(e){
+    this.remind = e.detail.checked;
+  }
+
   ionViewDidEnter(){
     this.iconService.getNames().then((icons:any) => {
       this.icons = icons;
@@ -77,8 +82,7 @@ export class NewTaskModulePage implements OnInit {
   } 
 
   public changeDue(e) {
-    let D = Date.parse(e.detail.value);
-    this.due = D / 1000;
+    this.due = Date.parse(e.detail.value);
   }
 
   public addNew(){
@@ -93,6 +97,7 @@ export class NewTaskModulePage implements OnInit {
       cr: new Date().getTime(),
       co: false,
       due: this.due,
+      remind: this.remind
     };
     this.modalController.dismiss(item);
   }

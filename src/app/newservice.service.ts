@@ -13,6 +13,7 @@ export interface todoItem {
   co: any;
   p:string;
   due:any;
+  remind:boolean;
 }
 
 @Injectable({

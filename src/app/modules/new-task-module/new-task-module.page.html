@@ -62,6 +62,11 @@
 
   </ion-accordion-group>
 
+  <ion-item >
+    <ion-label position="fixed">Remind</ion-label>
+    <ion-toggle mode="ios" slot="end" color="success" #reminder (ionChange)='changeReminder($event)'></ion-toggle>
+  </ion-item>
+
 </ion-content>
 
 <ion-footer>
