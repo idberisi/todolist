@@ -80,7 +80,6 @@ export class NewserviceService {
     return this.items[index];
   }
 
-
   public addItem(item: todoItem) {
     this.items.push(item);
     this.text = '';

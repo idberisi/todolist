@@ -266,6 +266,7 @@ export class HomePage implements OnInit, AfterViewInit {
       });
 
     }
+    
   }
 
   progress() {
