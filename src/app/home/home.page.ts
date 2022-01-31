@@ -42,11 +42,26 @@ export class HomePage implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    this.loaded = false;
     this.newService.getItems();
   }
 
-  ngAfterViewInit() {
+  checkTimes() {
+    const nowTime:number = new Date().getTime();
+    const times = this.items.map(x => x.due)
+    times.forEach((t,i) => {
+      if(this.items[i].due) {
+        if(t < nowTime) {
+          console.log("item: "+i,t)
+        }
+      }
+    })
+  } 
 
+  ngAfterViewInit() {
+    setInterval(()=>{
+      this.nowTime = new Date().getTime();
+    },1000);
   }
 
   public activeItem: any = false;
@@ -57,6 +72,9 @@ export class HomePage implements OnInit, AfterViewInit {
   public hidden: boolean = false;
   public percentage:number =  0;
   public loaded:boolean = false;
+  public adjustingProgress:boolean = false;
+  public nowTime:number = 0;
+  public complete:number = 0;
 
   async presentModal() {
     const modal = await this.modalController.create({
@@ -109,7 +127,7 @@ export class HomePage implements OnInit, AfterViewInit {
   private async toast(message: string, color: any = false) {
     return await this.toastController.create({
       message: message,
-      position: "bottom",
+      position: "middle",
       color: color ? color : '',
       duration: 3000
     }).then(TOAST => {
@@ -191,6 +209,8 @@ export class HomePage implements OnInit, AfterViewInit {
 
   public toggleState(item, i, e) {
 
+    this.adjustingProgress = true;
+
     let state: boolean = e.detail.checked;
     item.c = state;
     this.items[i] = item;
@@ -203,7 +223,9 @@ export class HomePage implements OnInit, AfterViewInit {
         this.items[i].co = false;
       }
       this.newService.markAsComplete(i, state);
-      this.newService.save()
+      this.newService.save().then(()=>{
+        this.adjustingProgress = false;
+      })
     })
   }
 
@@ -246,7 +268,6 @@ export class HomePage implements OnInit, AfterViewInit {
     return hide;
   }
 
-
   private async processDownload(items: any) {
     if (items) {
       let js = JSON.stringify(items);
@@ -275,6 +296,8 @@ export class HomePage implements OnInit, AfterViewInit {
         completedTasks++;
       }
     })
+
+    this.complete = completedTasks;
     if(this.items.length > 0) {
       this.percentage = completedTasks / this.items.length;
     } else {

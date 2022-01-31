@@ -9,7 +9,10 @@
     </ion-buttons>
 
     <ion-title class="text-center">
-      To-do List - {{items.length}} Items
+      {{complete}} / {{items.length}} Items
+      <ion-row *ngIf="this.nowTime > 0" class="ion-justify-content-center">
+        <ion-note color="medium">{{ this.nowTime | date:"dd-M-Y HH:mm:ss" }}</ion-note>
+      </ion-row>
     </ion-title>
 
     <ion-buttons slot="end">
@@ -21,7 +24,12 @@
       </ion-button>
     </ion-buttons>
 
+
   </ion-toolbar>
+
+ 
+
+    
 </ion-header>
 
 <ion-content [fullscreen]="true">
@@ -39,7 +47,7 @@
     </div>
   </div>
 
-  <ion-list class="ion-no-margin ion-no-padding" *ngIf="this.loaded && this.items.length > 0">
+  <ion-list class="ion-no-margin ion-no-padding highIndex" *ngIf="this.loaded && this.items.length > 0">
     <ion-item-sliding class="sliderItem no-lines" [class.complete]="item.c" [class.low]="getP(item) == 'low'"
       [class.medium]="getP(item) == 'medium'" [class.high]="getP(item) == 'high'" (click)="setItem(item)" #slidingItems
       *ngFor="let item of items;let i = index" [hidden]="shouldHide(item)">
@@ -50,7 +58,7 @@
         </ion-item-option>
       </ion-item-options>
 
-      <ion-item>
+      <ion-item [class.overdue]="item.due < nowTime">
         <div class="icons ion-margin-right">
           <ion-icon *ngIf="item.i" [name]="item.i"></ion-icon>
           <ion-icon *ngIf="item.p" [name]="item.p" [color]="setColour(item)"></ion-icon>
@@ -83,5 +91,6 @@
     </ion-item-sliding>
   </ion-list>
 
-  <ion-progress-bar class="bottomfxing" slot="fixed" color="success" [value]="this.percentage"></ion-progress-bar>
-</ion-content>
+  <ion-progress-bar [class.scaling]="this.adjustingProgress" class="bottomfxing" slot="fixed" color="success" [value]="this.percentage"></ion-progress-bar>
+
+  </ion-content>
