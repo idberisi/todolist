@@ -1,4 +1,4 @@
-import { todoItem } from 'src/app/newservice.service';
+import { todoItem } from './newservice.service';
 import { Injectable } from '@angular/core';
 import { CancelOptions, LocalNotifications,ScheduleOptions,LocalNotificationSchema,PermissionStatus,ScheduleResult,PendingResult, Schedule, ActionPerformed } from '@capacitor/local-notifications';
 

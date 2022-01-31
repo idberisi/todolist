@@ -1,5 +1,5 @@
-import { UserService } from './services/user.service';
-import { ApiService } from './services/api.service';
+import { UserService } from './user.service';
+import { ApiService } from './api.service';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { TodolistServiceService } from './todolist-service.service';

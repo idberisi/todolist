@@ -1,17 +1,17 @@
-import { ApiService } from './../services/api.service';
-import { UserService } from './../services/user.service';
-import { ItemDetailPage } from './../pages/item-detail/item-detail.page';
+import { ApiService } from 'src/app/services/api.service';
+import { UserService } from 'src/app//services/user.service';
+import { ItemDetailPage } from 'src/app/pages/item-detail/item-detail.page';
 import { ChangeDetectorRef, Component, NgZone, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { AlertController, IonItemSliding, ToastController } from '@ionic/angular';
-import { NewserviceService, todoItem } from '../newservice.service';
+import { NewserviceService,todoItem } from 'src/app/services/newservice.service';
 import { ModalController } from '@ionic/angular';
-import { NewTaskModulePage } from '../modules/new-task-module/new-task-module.page';
+import { NewTaskModulePage } from 'src/app/modules/new-task-module/new-task-module.page';
 import { Share } from '@capacitor/share';
 
 @Component({
   selector: 'app-home',
-  templateUrl: 'home.page.html',
-  styleUrls: ['home.page.scss'],
+  templateUrl: './home.page.html',
+  styleUrls: ['./home.page.scss'],
 })
 export class HomePage implements OnInit, AfterViewInit {
 

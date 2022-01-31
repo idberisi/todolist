@@ -1,9 +1,9 @@
 import { NotificationService } from './../../services/notification.service';
 import { IconographyService } from './../../services/iconography.service';
-import { TodolistServiceService } from './../../todolist-service.service';
+import { TodolistServiceService } from 'src/app/services/todolist-service.service';
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, Input } from '@angular/core';
 import { AlertController, IonToggle, ModalController, IonDatetime, IonSelect, ToastController } from '@ionic/angular';
-import { NewserviceService } from 'src/app/newservice.service';
+import { NewserviceService } from './../../services/newservice.service';
 
 import { LocalNotifications, PendingResult } from '@capacitor/local-notifications';
 

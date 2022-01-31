@@ -1,7 +1,7 @@
 import { IconographyService } from './../../services/iconography.service';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { IonSelect, IonText, ModalController } from '@ionic/angular';
-import { todoItem } from 'src/app/newservice.service';
+import { todoItem } from 'src/app/services/newservice.service';
 
 @Component({
   selector: 'app-new-task-module',
