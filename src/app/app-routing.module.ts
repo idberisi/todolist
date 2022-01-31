@@ -12,10 +12,6 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'contact',
-    loadChildren: () => import('./pages/contact/contact.module').then( m => m.ContactPageModule)
-  },
-  {
     path: 'todo-list',
     loadChildren: () => import('./pages/todo-list/todo-list.module').then( m => m.TodoListPageModule)
   },
